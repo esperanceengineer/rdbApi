@@ -2,12 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Data\Profile;
+use App\Models\User;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -20,15 +23,20 @@ class UserFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     * @throws Exception
      */
     public function definition(): array
     {
         return [
+            'username' => fake()->randomNumber(5),
             'name' => fake()->name(),
+            'firstname' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('123456789012'),
             'remember_token' => Str::random(10),
+            'is_locked' => random_int(0, 1),
+            'profile' => fake()->randomElement(Profile::getCodes()),
         ];
     }
 
@@ -39,6 +47,33 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'username' => '12345',
+            'is_locked' => 1,
+            'profile' => Profile::ADMIN,
+        ]);
+    }
+
+    public function representant(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'username' => '56789',
+            'is_locked' => 1,
+            'profile' => Profile::REPRESENTANT,
+        ]);
+    }
+
+    public function consultant(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'username' => '01234',
+            'is_locked' => 1,
+            'profile' => Profile::CONSULTANT,
         ]);
     }
 }
