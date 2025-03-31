@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('email')->nullable();
             $table->string('image')->nullable();
+            $table->string('office')->nullable();
             $table->boolean('is_locked')->default(false);
             $table->boolean('has_password_temp')->default(false);
             $table->enum('profile', Profile::getCodes())->default(Profile::REPRESENTANT);

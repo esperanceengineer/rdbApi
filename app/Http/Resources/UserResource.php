@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'Password' => $this->password,
             'Image' => $this->image,
             'IsLocked' => $this->is_locked,
+            'Office' => $this->office,
             'HasPasswordTemp' => $this->has_password_temp,
             'CreatedAt' => $this->created_at,
             'UpdatedAt' => $this->updated_at,
