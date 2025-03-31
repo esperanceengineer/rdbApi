@@ -3,7 +3,6 @@
 namespace App\Helper;
 
 use App\Classes\Constant;
-use App\Data\DocumentType;
 use App\Data\FileType;
 use Exception;
 use Transliterator;
