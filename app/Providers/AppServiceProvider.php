@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use App\Data\Profile;
 use App\Enums\GLOBAL_ROLE;
 use App\Models\User;
-
-
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,6 +47,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
 
-
+        JsonResource::withoutWrapping();
     }
 }

@@ -18,6 +18,7 @@ class CandidateResource extends JsonResource
             'Id' => $this->id,
             'FullName' => $this->fullname,
             'Image' => $this->image,
+            'ImageUrl' => $this->image_url,
         ];
 
     }

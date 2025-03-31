@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Candidate extends Model
 {
@@ -18,4 +19,13 @@ class Candidate extends Model
         'fullname',
         'image',
     ];
+
+    protected $appends = ['image_url'];
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) =>  url('').'/'.$attributes['image'],
+        );
+    }
 }
