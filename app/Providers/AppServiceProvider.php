@@ -5,9 +5,12 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
+use App\Data\Profile;
+use App\Enums\GLOBAL_ROLE;
+use App\Models\User;
+
 
 
 class AppServiceProvider extends ServiceProvider
@@ -31,5 +34,20 @@ class AppServiceProvider extends ServiceProvider
                 return response('Les requêtes depassent le nombre défini ...', 429, $headers);
             });
         });
+
+        Gate::define(GLOBAL_ROLE::ADMIN->value, function (User $user) {
+            return $user->profile == Profile::ADMIN;
+        });
+
+        Gate::define(GLOBAL_ROLE::CONSULTANT->value, function (User $user) {
+            return $user->profile == Profile::CONSULTANT;
+        });
+
+        Gate::define(GLOBAL_ROLE::REPRESANTANT->value, function (User $user) {
+            return $user->profile != Profile::REPRESENTANT;
+        });
+
+
+
     }
 }
