@@ -1,16 +1,15 @@
 <?php
 
 use App\Enums\GLOBAL_ROLE;
+use App\Http\Controllers\Api\SecurityController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\AlwaysAcceptsJson;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::post('/login', [SecurityController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'throttle:api', AlwaysAcceptsJson::class])->prefix('auth')->group(function () {
+    Route::post('/logout', [SecurityController::class, 'logout']);
 
     Route::middleware('can:'.GLOBAL_ROLE::ADMIN->value)->prefix('admin')->group(function () {
         Route::apiResource('users', UserController::class);

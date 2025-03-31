@@ -54,7 +54,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'username' => '12345',
-            'is_locked' => 1,
+            'is_locked' => 0,
             'profile' => Profile::ADMIN,
         ]);
     }
@@ -63,7 +63,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'username' => '56789',
-            'is_locked' => 1,
+            'is_locked' => 0,
             'profile' => Profile::REPRESENTANT,
         ]);
     }
@@ -72,7 +72,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'username' => '01234',
-            'is_locked' => 1,
+            'is_locked' => 0,
             'profile' => Profile::CONSULTANT,
         ]);
     }

@@ -31,7 +31,7 @@ class Profile extends Data
         ],
         [
             'id' => self::REPRESENTANT,
-            'label' => 'Representant',
+            'label' => 'Représentant',
             'role' => self::ROLE_REPRESENTANT,
             'key' => self::KEY_REPRESENTANT,
         ],

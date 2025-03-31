@@ -15,7 +15,7 @@ class SecurityService
 {
     public function loginApi(LoginUserRequest $request): JsonResponse
     {
-        $user = User::where('registration', $request->getUsername())->first();
+        $user = User::where('username', $request->getUsername())->first();
         if (!$user || !Hash::check($request->getPassword(), $user->password)) {
 
             $key = 'login:'.$request->ip();
@@ -36,9 +36,9 @@ class SecurityService
         }
 
         $token = $user->createToken(
-            $user->registration.'_token',
+            $user->username.'_token',
             ['*'],
-            now()->addHour()
+            now()->addDays(2)
         )->plainTextToken;
 
         $success = true;
