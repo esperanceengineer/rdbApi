@@ -57,7 +57,8 @@ class UserFactory extends Factory
     public function admin(): static
     {
         return $this->state(fn (array $attributes) => [
-            'username' => '12345',
+            'username' => 'ADMIN',
+            'password' => Hash::make('ADMIN@2025'),
             'is_locked' => 0,
             'profile' => Profile::ADMIN,
         ]);
@@ -66,7 +67,8 @@ class UserFactory extends Factory
     public function representant(): static
     {
         return $this->state(fn (array $attributes) => [
-            'username' => '56789',
+            'username' => 'REPRESENTANT',
+            'password' => Hash::make('REPRESENTANT@2025'),
             'is_locked' => 0,
             'profile' => Profile::REPRESENTANT,
         ]);
@@ -75,7 +77,8 @@ class UserFactory extends Factory
     public function consultant(): static
     {
         return $this->state(fn (array $attributes) => [
-            'username' => '01234',
+            'username' => 'CONSULTANT',
+            'password' => Hash::make('CONSULTANT@2025'),
             'is_locked' => 0,
             'profile' => Profile::CONSULTANT,
         ]);
@@ -84,7 +87,9 @@ class UserFactory extends Factory
     public function president(): static
     {
         return $this->state(fn (array $attributes) => [
-            'username' => 'PRESIDENT@2025',
+            'username' => 'PRESIDENT',
+            'name' => 'Brice Clotaire OLIGUI NGUEMA',
+            'password' => Hash::make('PRESIDENT@2025'),
             'is_locked' => 0,
             'profile' => Profile::PRESIDENT,
         ]);
