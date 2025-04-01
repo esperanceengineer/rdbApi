@@ -51,6 +51,7 @@ class SecurityService
 
         return response()->json([
             'message' => $message,
+            'success' => $success,
             'data' => [
                 'access_token' => $token,
                 'token_type' => 'Bearer',
@@ -65,6 +66,7 @@ class SecurityService
         $request->user()->tokens()->delete();
         return response()->json([
             'message' => 'Utilisateur déconnecté.',
+            'sucess' => true,
         ], Response::HTTP_OK);
     }
 }

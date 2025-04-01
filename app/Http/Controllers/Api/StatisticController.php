@@ -96,14 +96,14 @@ class StatisticController extends Controller
             }
             $result->save();
 
-            /**$statistics = is_array($statistics) ? $statistics : json_decode($statistics, true);
+            $statistics = is_array($statistics) ? $statistics : json_decode($statistics, true);
             foreach($statistics as $statistic) {
                 $newStatistic = new Statistic();
                 $newStatistic->vote = $statistic['vote'];
                 $newStatistic->candidate_id = $statistic['candidate_id'];
                 $newStatistic->result_id = $result->id;
                 $newStatistic->save();
-            }**/
+            }
 
             DB::commit();
 
