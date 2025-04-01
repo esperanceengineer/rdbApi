@@ -12,6 +12,7 @@ use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\LocalityResource;
 use App\Http\Resources\ProvincyResource;
 use App\Http\Resources\ResultResource;
+use App\Http\Resources\StatisticResource;
 use App\Models\Candidate;
 use App\Models\Result;
 use App\Models\Statistic;
@@ -131,18 +132,28 @@ class StatisticController extends Controller
     {
 
         $result = [];
-        //Filter bar centre de vote
+        //Filter par centre de vote
         if ($center_id = $request->input('center_id')) {
             $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id WHERE rest.center_id = :id GROUP BY fullname, id, image", ['id'=> $center_id]);
         }
         
-        return $result;
+        //Filter par arrondissement
+        if ($locality_id = $request->input('locality_id')) {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id WHERE cent.locality_id = :id GROUP BY fullname, id, image", ['id'=> $locality_id]);
+        }
 
-        /**$queryBuilder = Candidate::with('statistics');
-        $results = $queryBuilder->get();
+        //Filter par commune
+        if ($department_id = $request->input('department_id')) {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id WHERE local.department_id = :id GROUP BY fullname, id, image", ['id'=> $department_id]);
+        }
 
-        return ApiResponseClass::sendResponse(result: $results, message: 'Liste des resultats', code: 200);**/
-        // $result = DB::select("SELECT cand.fullname as fullname, SUM(stats.vote) as total FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id GROUP BY fullname");
+         //Filter par province
+         if ($provincy_id = $request->input('provincy_id')) {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id WHERE depart.provincy_id = :id GROUP BY fullname, id, image", ['id'=> $provincy_id]);
+        }
+        
 
+        $statistics = StatisticResource::collection($result);
+        return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);
     }
 }
