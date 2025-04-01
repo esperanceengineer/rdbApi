@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('label');
             $table->integer('status')->default(1);
+            $table->integer('all')->default(1);
             $table->timestamps();
         });
     }

@@ -81,7 +81,7 @@ class StatisticController extends Controller
             $statistics = $request->input('statistics');
             $office = $request->input('office');
 
-            if (!is_null(Result::where('user_id',$user_id)->first())) {
+            if (!is_null(Result::where('user_id', $user_id)->first())) {
 
                 return response()->json([
                     'message' => 'Vous avez déjà soumis le result de ce bureau de vote',
@@ -102,7 +102,7 @@ class StatisticController extends Controller
             $result->save();
 
             $statistics = is_array($statistics) ? $statistics : json_decode($statistics, true);
-            foreach($statistics as $statistic) {
+            foreach ($statistics as $statistic) {
                 $newStatistic = new Statistic();
                 $newStatistic->vote = $statistic['vote'];
                 $newStatistic->candidate_id = $statistic['candidate_id'];
@@ -117,7 +117,6 @@ class StatisticController extends Controller
                 'success' => true,
                 'data' => new ResultResource($result)
             ], Response::HTTP_OK);
-
         } catch (Exception $ex) {
             DB::rollBack();
 
@@ -132,26 +131,29 @@ class StatisticController extends Controller
     {
 
         $result = [];
+        $candidate_id = $request->input('candidate_id',1);
         //Filter par centre de vote
         if ($center_id = $request->input('center_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id WHERE rest.center_id = :id GROUP BY fullname, id, image", ['id'=> $center_id]);
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id WHERE rest.center_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image", ['id' => $center_id, 'candidate_id' => $candidate_id]);
         }
-        
+
         //Filter par arrondissement
-        if ($locality_id = $request->input('locality_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id WHERE cent.locality_id = :id GROUP BY fullname, id, image", ['id'=> $locality_id]);
+        else if ($locality_id = $request->input('locality_id')) {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id WHERE cent.locality_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image", ['id' => $locality_id, 'candidate_id' => $candidate_id]);
         }
 
         //Filter par commune
-        if ($department_id = $request->input('department_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id WHERE local.department_id = :id GROUP BY fullname, id, image", ['id'=> $department_id]);
+        else if ($department_id = $request->input('department_id')) {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id WHERE local.department_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image", ['id' => $department_id, 'candidate_id' => $candidate_id]);
         }
 
-         //Filter par province
-         if ($provincy_id = $request->input('provincy_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id WHERE depart.provincy_id = :id GROUP BY fullname, id, image", ['id'=> $provincy_id]);
+        //Filter par province
+        else if ($provincy_id = $request->input('provincy_id')) {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id WHERE depart.provincy_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image", ['id' => $provincy_id, 'candidate_id' => $candidate_id]);
+        } else {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id LEFT JOIN provincies prov ON prov.id = depart.provincy_id WHERE prov.all = :id GROUP BY fullname, id, image", ['id' => 1]);
         }
-        
+
 
         $statistics = StatisticResource::collection($result);
         return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);

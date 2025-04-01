@@ -5,7 +5,9 @@ use App\Http\Controllers\Api\SecurityController;
 use App\Http\Controllers\Api\StatisticController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\AlwaysAcceptsJson;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::post('/login', [SecurityController::class, 'login']);
 
@@ -25,7 +27,9 @@ Route::middleware(['auth:sanctum', 'throttle:api', AlwaysAcceptsJson::class])->p
         Route::post('users/{user}/resetPassword', [UserController::class, 'resetPassword']);
     });
 
-    Route::middleware('can:' . GLOBAL_ROLE::CONSULTANT->value)->prefix('consultant')->group(function () {});
+    Route::middleware('can:' . GLOBAL_ROLE::CONSULTANT->value)->prefix('consultant')->group(function () {
+        Route::get('results', [StatisticController::class, 'getResult']);
+    });
 
     Route::middleware('can:' . GLOBAL_ROLE::REPRESENTANT->value)->prefix('representant')->group(function () {
         Route::post('results', [StatisticController::class, 'storeResult']);
