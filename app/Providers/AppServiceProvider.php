@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define(GLOBAL_ROLE::CONSULTANT->value, function (User $user) {
-            return $user->profile == Profile::CONSULTANT;
+            return $user->profile == Profile::CONSULTANT ||  $user->profile == Profile::PRESIDENT;
         });
 
         Gate::define(GLOBAL_ROLE::REPRESANTANT->value, function (User $user) {

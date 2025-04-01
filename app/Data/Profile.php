@@ -10,17 +10,23 @@ class Profile extends Data
 
     const CONSULTANT = 'CONSULTANT';
 
+    const PRESIDENT = 'PRESIDENT';
+
     const ROLE_ADMIN = 'ROLE_ADMIN';
 
     const ROLE_REPRESENTANT = 'ROLE_REPRESENTANT';
 
     const ROLE_CONSULTANT = 'ROLE_CONSULTANT';
 
+    const ROLE_PRESIDENT = 'PRESIDENT';
+
     const KEY_ADMIN = 'admin';
 
     const KEY_REPRESENTANT = 'representant';
 
     const KEY_CONSULTANT = 'consultant';
+
+    const KEY_PRESIDENT = 'president';
 
     const LIST = [
         [
@@ -40,6 +46,13 @@ class Profile extends Data
             'label' => 'Consultant',
             'role' => self::ROLE_CONSULTANT,
             'key' => self::KEY_CONSULTANT,
+        ],
+
+        [
+            'id' => self::PRESIDENT,
+            'label' => 'Président',
+            'role' => self::ROLE_PRESIDENT,
+            'key' => self::KEY_PRESIDENT,
         ],
     ];
 

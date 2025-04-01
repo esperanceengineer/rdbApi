@@ -76,4 +76,13 @@ class UserFactory extends Factory
             'profile' => Profile::CONSULTANT,
         ]);
     }
+
+    public function president(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'username' => 'PRESIDENT@2025',
+            'is_locked' => 0,
+            'profile' => Profile::PRESIDENT,
+        ]);
+    }
 }
