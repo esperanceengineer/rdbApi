@@ -16,5 +16,6 @@ class UserSeeder extends Seeder
         User::factory()->admin()->create();
         User::factory()->representant()->create();
         User::factory()->consultant()->create();
+        User::factory()->president()->create();
     }
 }

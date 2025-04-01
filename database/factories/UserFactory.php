@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Data\Profile;
+use App\Models\Center;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -27,6 +28,8 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $centerCount = Center::count();
+
         return [
             'username' => fake()->randomNumber(5),
             'name' => fake()->name(),
@@ -36,6 +39,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('123456789012'),
             'remember_token' => Str::random(10),
             'is_locked' => random_int(0, 1),
+            'center_id' => random_int(1, $centerCount),
             'profile' => fake()->randomElement(Profile::getCodes()),
         ];
     }

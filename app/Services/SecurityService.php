@@ -15,7 +15,7 @@ class SecurityService
 {
     public function loginApi(LoginUserRequest $request): JsonResponse
     {
-        $user = User::where('username', $request->getUsername())->first();
+        $user = User::with('center')->where('username', $request->getUsername())->first();
         if (!$user || !Hash::check($request->getPassword(), $user->password)) {
 
             $key = 'login:'.$request->ip();

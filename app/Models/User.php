@@ -11,6 +11,7 @@ use App\Models\Scopes\OrderByUpdatedAtScope;
 use App\Models\Traits\HasFiles;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
 
 
@@ -60,6 +61,11 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => Profile::getLabel($attributes['profile']),
         );
+    }
+
+    public function center(): BelongsTo
+    {
+        return $this->belongsTo(Center::class);
     }
 
 }
