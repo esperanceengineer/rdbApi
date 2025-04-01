@@ -11,6 +11,7 @@ use App\Http\Resources\CenterResource;
 use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\LocalityResource;
 use App\Http\Resources\ProvincyResource;
+use App\Http\Resources\ResultResource;
 use App\Models\Result;
 use App\Models\Statistic;
 use App\Services\Domain\StatisticService;
@@ -111,7 +112,8 @@ class StatisticController extends Controller
 
             return response()->json([
                 'message' => 'Le resultat du bureau de vote est bien soumis',
-                'success' => true
+                'success' => true,
+                'data' => new ResultResource($result)
             ], Response::HTTP_OK);
 
         } catch (Exception $ex) {

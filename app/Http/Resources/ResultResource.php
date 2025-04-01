@@ -16,10 +16,12 @@ class ResultResource extends JsonResource
     {
         return [
             'Id' => $this->id,
-            'FullName' => $this->fullname,
-            'Image' => $this->image,
-            'ImageUrl' => $this->image_url,
-            'Percentage' => $this->image_url,
+            'Absension' => $this->absension,
+            'InvalidBulletin' => $this->invalid_bulletin,
+            'ExpressedSuffrage' => $this->expressed_suffrage,
+            'TotalRegistered' => $this->total_registered,
+            'UserId' => $this->user_id,
+            'CenterId' => $this->center_id,
         ];
     }
 }
