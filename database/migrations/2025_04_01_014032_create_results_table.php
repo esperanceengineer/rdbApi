@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('absension');
             $table->integer('invalid_bulletin');
             $table->integer('expressed_suffrage');
+            $table->integer('total_registered');
             $table->string('image')->nullable();
             $table->string('office')->nullable();
 

@@ -24,6 +24,7 @@ class StoreResult extends FormRequest
     public function rules(): array
     {
         return [
+            'total_registered' => 'required|integer',
             'absension' => 'required|integer',
             'invalid_bulletin' => 'required|integer',
             'expressed_suffrage' => 'required|integer',
@@ -42,6 +43,9 @@ class StoreResult extends FormRequest
     public function messages(): array
     {
         return [
+            'total_registered.required' => "Le total des inscrits est obligatoire",
+            'total_registered.integer' => "Le total des inscrits doit être un entier",
+
             'absension.required' => "L'absention est obligatoire",
             'absension.integer' => "L'absention doit être un entier",
 

@@ -70,6 +70,7 @@ class StatisticController extends Controller
 
         try {
             $absension = $request->input('absension');
+            $total_registered = $request->input('total_registered');
             $invalid_bulletin = $request->input('invalid_bulletin');
             $expressed_suffrage = $request->input("expressed_suffrage");
             $user_id = $request->input('user_id') ?? Auth::user()->id;
@@ -87,6 +88,7 @@ class StatisticController extends Controller
 
             $result = new Result();
             $result->absension  = $absension;
+            $result->total_registered  = $total_registered;
             $result->invalid_bulletin  = $invalid_bulletin;
             $result->expressed_suffrage  = $expressed_suffrage;
             $result->user_id  = $user_id;
