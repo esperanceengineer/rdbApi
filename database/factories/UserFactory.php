@@ -35,6 +35,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'firstname' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
+            'office' => "Bureau_".random_int(20, 50),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('123456789012'),
             'remember_token' => Str::random(10),
@@ -71,6 +72,7 @@ class UserFactory extends Factory
             'password' => Hash::make('REPRESENTANT@2025'),
             'is_locked' => 0,
             'profile' => Profile::REPRESENTANT,
+            'office' => "Bureau_".random_int(1, 20),
         ]);
     }
 
