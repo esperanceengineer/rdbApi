@@ -5,9 +5,7 @@ use App\Http\Controllers\Api\SecurityController;
 use App\Http\Controllers\Api\StatisticController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\AlwaysAcceptsJson;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 Route::post('/login', [SecurityController::class, 'login']);
 
