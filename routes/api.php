@@ -11,7 +11,12 @@ Route::post('/login', [SecurityController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'throttle:api', AlwaysAcceptsJson::class])->prefix('auth')->group(function () {
     Route::post('/logout', [SecurityController::class, 'logout']);
+    
     Route::get('candidates', [StatisticController::class,'candidates']);
+    Route::get('provincies', [StatisticController::class,'provincies']);
+    Route::get('departments', [StatisticController::class,'departments']);
+    Route::get('localities', [StatisticController::class,'localities']);
+    Route::get('centers', [StatisticController::class,'centers']);
 
     Route::middleware('can:'.GLOBAL_ROLE::ADMIN->value)->prefix('admin')->group(function () {
         Route::apiResource('users', UserController::class);
