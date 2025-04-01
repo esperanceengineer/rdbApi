@@ -12,6 +12,7 @@ use App\Http\Resources\DepartmentResource;
 use App\Http\Resources\LocalityResource;
 use App\Http\Resources\ProvincyResource;
 use App\Http\Resources\ResultResource;
+use App\Models\Candidate;
 use App\Models\Result;
 use App\Models\Statistic;
 use App\Services\Domain\StatisticService;
@@ -124,5 +125,24 @@ class StatisticController extends Controller
                 'success' => false
             ], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function getResult(Request $request)
+    {
+
+        $result = [];
+        //Filter bar centre de vote
+        if ($center_id = $request->input('center_id')) {
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id WHERE rest.center_id = :id GROUP BY fullname, id, image", ['id'=> $center_id]);
+        }
+        
+        return $result;
+
+        /**$queryBuilder = Candidate::with('statistics');
+        $results = $queryBuilder->get();
+
+        return ApiResponseClass::sendResponse(result: $results, message: 'Liste des resultats', code: 200);**/
+        // $result = DB::select("SELECT cand.fullname as fullname, SUM(stats.vote) as total FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id GROUP BY fullname");
+
     }
 }
