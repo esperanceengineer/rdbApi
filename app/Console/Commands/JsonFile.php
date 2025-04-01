@@ -8,11 +8,8 @@ use App\Models\Department;
 use App\Models\Locality;
 use App\Models\Provincy;
 use App\Models\User;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
 use App\Data\Profile;
-use App\Enums\GLOBAL_ROLE;
 use App\Helper\Tools;
 
 class JsonFile extends Command
