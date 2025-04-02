@@ -79,7 +79,7 @@ class UserFactory extends Factory
     public function representantExterne(): static
     {
         return $this->state(fn (array $attributes) => [
-            'username' => 'REPRESENTANT_O1',
+            'username' => 'REPRESENTANT_01',
             'password' => Hash::make('REPRESENTANT_01@2025'),
             'is_locked' => 0,
             'profile' => Profile::REPRESENTANT,
