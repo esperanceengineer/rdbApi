@@ -73,6 +73,18 @@ class UserFactory extends Factory
             'is_locked' => 0,
             'profile' => Profile::REPRESENTANT,
             'office' => "Bureau_".random_int(1, 20),
+            'center_id' => 1,
+        ]);
+    }
+    public function representantExterne(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'username' => 'REPRESENTANT_O1',
+            'password' => Hash::make('REPRESENTANT_01@2025'),
+            'is_locked' => 0,
+            'profile' => Profile::REPRESENTANT,
+            'office' => "Bureau_".random_int(1, 20),
+            'center_id' => 6,
         ]);
     }
 

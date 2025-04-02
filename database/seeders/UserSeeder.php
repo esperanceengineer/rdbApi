@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -13,8 +14,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        Artisan::call("app:json-file");
+        
         User::factory()->admin()->create();
         User::factory()->representant()->create();
+        User::factory()->representantExterne()->create();
         User::factory()->president()->create();
         
         User::factory()->consultant()->create([

@@ -39,7 +39,7 @@ abstract class Tools
 
     public static function makeAcronym(string $phrase): string
     {
-        $removalWords = ['et', "'", 'à', 'après', 'les', 'au', 'aux', 'du', 'des', 'chez', 'dans', 'de', 'entre', 'jusque', 'hors', 'par', 'pour', 'sans', 'vers', 'de', 'la', 'des', "l'", "d'", 'en'];
+        $removalWords = ['et', "'", 'à', 'après', 'les', 'au', 'aux', 'du', 'des', 'chez', 'dans', 'de', 'entre', 'jusque', 'hors', 'par', 'pour', 'sans', 'vers', 'de', 'la', 'des', "l'", "d'", 'en', "(", ")"];
 
         $_acronym = '';
 

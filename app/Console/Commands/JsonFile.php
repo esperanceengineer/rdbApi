@@ -89,14 +89,15 @@ class JsonFile extends Command
 
                         for ($i = 1; $i <= $nbrbureaux; $i++) {
                             $firstString  = substr($newProvince->label, 0, 3);
-                            $number_format = sprintf('%02d', $i);
-                            $office = Tools::makeAcronym($centerLabel);
+                            $number_format = 'B'.sprintf('%02d', $i);
+                            $accronym = Tools::makeAcronym($centerLabel).''.$i;
+                            $office = str_replace("(","",$accronym);
                             $userName = $firstString . '_' . $office . "_" . $number_format;
                             $password = $userName . "@2025";
 
                             $newUser = new User();
                             $newUser->profile = Profile::REPRESENTANT;
-                            $newUser->office = $office;
+                            $newUser->office = $userName;
                             $newUser->name = $userName;
                             $newUser->username  = $userName;
                             $newUser->password  = Hash::make($password);
