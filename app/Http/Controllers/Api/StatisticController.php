@@ -127,7 +127,7 @@ class StatisticController extends Controller
         }
     }
 
-    public function getResult(Request $request)
+    public function getResults(Request $request)
     {
 
         $result = [];
@@ -170,5 +170,18 @@ class StatisticController extends Controller
             $statistics = StatisticResource::collection($result);
             return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);
         }
+    }
+
+    public function getResult(int $userId) {
+
+        $result = Result::where('user_id', $userId)->first();
+        if (!is_null($result))
+        {
+            $statistic = new ResultResource($result);
+            return ApiResponseClass::sendResponse(result: $statistic, message: 'Le résultat', code: 200);
+        }else {
+            return ApiResponseClass::sendResponse(result:null,message:"Ce résultat n'exist pas", code:404, success: false);
+        }
+
     }
 }
