@@ -135,53 +135,52 @@ class StatisticController extends Controller
 
         //Filtre par province status
         if ($status = $request->input('status')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, prov.label as province, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id LEFT JOIN provincies prov ON prov.id = depart.provincy_id WHERE prov.status = :status AND cand.id =:id GROUP BY fullname, id, image, province ORDER BY percentage DESC", ['status' => $status, 'id' => $candidate_id]);
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, prov.label as province, SUM(stats.vote) as vote, SUM(rest.absension) as absension,SUM(rest.invalid_bulletin) as invalid_bulletin,SUM(rest.expressed_suffrage) as expressed_suffrage,SUM(rest.total_registered) as total_registered, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id LEFT JOIN provincies prov ON prov.id = depart.provincy_id WHERE prov.status = :status AND cand.id =:id GROUP BY fullname, id, image, province ORDER BY percentage DESC", ['status' => $status, 'id' => $candidate_id]);
             $statistics = StatisticProvinceResource::collection($result);
             return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats par province', code: 200);
         }
         //Filter par centre de vote id
         else if ($center_id = $request->input('center_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id WHERE rest.center_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $center_id, 'candidate_id' => $candidate_id]);
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, SUM(stats.vote) as vote, SUM(rest.absension) as absension,SUM(rest.invalid_bulletin) as invalid_bulletin,SUM(rest.expressed_suffrage) as expressed_suffrage,SUM(rest.total_registered) as total_registered, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id WHERE rest.center_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $center_id, 'candidate_id' => $candidate_id]);
             $statistics = StatisticResource::collection($result);
             return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);
         }
 
         //Filter par arrondissement id
         else if ($locality_id = $request->input('locality_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id WHERE cent.locality_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $locality_id, 'candidate_id' => $candidate_id]);
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, SUM(stats.vote) as vote, SUM(rest.absension) as absension,SUM(rest.invalid_bulletin) as invalid_bulletin,SUM(rest.expressed_suffrage) as expressed_suffrage,SUM(rest.total_registered) as total_registered, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id WHERE cent.locality_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $locality_id, 'candidate_id' => $candidate_id]);
             $statistics = StatisticResource::collection($result);
             return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);
         }
 
         //Filter par commune id
         else if ($department_id = $request->input('department_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id WHERE local.department_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $department_id, 'candidate_id' => $candidate_id]);
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname,  SUM(stats.vote) as vote, SUM(rest.absension) as absension,SUM(rest.invalid_bulletin) as invalid_bulletin,SUM(rest.expressed_suffrage) as expressed_suffrage,SUM(rest.total_registered) as total_registered,(SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id WHERE local.department_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $department_id, 'candidate_id' => $candidate_id]);
             $statistics = StatisticResource::collection($result);
             return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);
         }
 
         //Filter par province id
         else if ($provincy_id = $request->input('provincy_id')) {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id WHERE depart.provincy_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $provincy_id, 'candidate_id' => $candidate_id]);
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, SUM(stats.vote) as vote, SUM(rest.absension) as absension,SUM(rest.invalid_bulletin) as invalid_bulletin,SUM(rest.expressed_suffrage) as expressed_suffrage,SUM(rest.total_registered) as total_registered, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id WHERE depart.provincy_id = :id AND cand.id = :candidate_id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => $provincy_id, 'candidate_id' => $candidate_id]);
             $statistics = StatisticResource::collection($result);
             return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);
         } else {
-            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id LEFT JOIN provincies prov ON prov.id = depart.provincy_id WHERE prov.all = :id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => 1]);
+            $result = DB::select("SELECT cand.id, cand.image, cand.fullname as fullname, SUM(stats.vote) as vote, SUM(rest.absension) as absension,SUM(rest.invalid_bulletin) as invalid_bulletin,SUM(rest.expressed_suffrage) as expressed_suffrage,SUM(rest.total_registered) as total_registered, (SUM(stats.vote) / SUM(rest.expressed_suffrage)) * 100 as percentage FROM candidates cand LEFT JOIN statistics stats ON stats.candidate_id = cand.id LEFT JOIN results rest ON stats.result_id = rest.id LEFT JOIN centers cent ON rest.center_id = cent.id LEFT JOIN localities local ON cent.locality_id = local.id LEFT JOIN departments depart ON local.department_id = depart.id LEFT JOIN provincies prov ON prov.id = depart.provincy_id WHERE prov.all = :id GROUP BY fullname, id, image ORDER BY percentage DESC", ['id' => 1]);
             $statistics = StatisticResource::collection($result);
             return ApiResponseClass::sendResponse(result: $statistics, message: 'Liste des résultats', code: 200);
         }
     }
 
-    public function getResult(int $userId) {
+    public function getResult(int $userId)
+    {
 
         $result = Result::where('user_id', $userId)->first();
-        if (!is_null($result))
-        {
+        if (!is_null($result)) {
             $statistic = new ResultResource($result);
             return ApiResponseClass::sendResponse(result: $statistic, message: 'Le résultat', code: 200);
-        }else {
-            return ApiResponseClass::sendResponse(result:null,message:"Ce résultat n'exist pas", code:404, success: false);
+        } else {
+            return ApiResponseClass::sendResponse(result: null, message: "Ce résultat n'exist pas", code: 404, success: false);
         }
-
     }
 }

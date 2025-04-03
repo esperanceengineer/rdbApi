@@ -20,6 +20,11 @@ class StatisticProvinceResource extends JsonResource
             'Image' => $this->image,
             'Percentage' => $this->percentage,
             'Province' => $this->province,
+            'Vote' => $this->vote,
+            'Absension' => $this->absension,
+            'InvalidBulletin' => $this->invalid_bulletin,
+            'ExpressedSuffrage' => $this->expressed_suffrage,
+            'TotalRegistered' => $this->total_registered,
         ];
     }
 }

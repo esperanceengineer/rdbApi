@@ -19,6 +19,11 @@ class StatisticResource extends JsonResource
             'FullName' => $this->fullname,
             'Image' => $this->image,
             'Percentage' => $this->percentage,
+            'Vote' => $this->vote,
+            'Absension' => $this->absension,
+            'InvalidBulletin' => $this->invalid_bulletin,
+            'ExpressedSuffrage' => $this->expressed_suffrage,
+            'TotalRegistered' => $this->total_registered,
         ];
     }
 }
