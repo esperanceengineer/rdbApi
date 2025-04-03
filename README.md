@@ -1,4 +1,4 @@
-# Prise en main de l'api du module gestion des impressions
+# Prise en main de l'api du RDB
 
 ## Pré-réquis:
 ### - php >= 8.2
