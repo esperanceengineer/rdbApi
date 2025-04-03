@@ -14,7 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        Artisan::call("app:json-file");
         
         User::factory()->admin()->create();
         User::factory()->representant()->create();

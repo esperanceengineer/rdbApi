@@ -19,7 +19,7 @@ class JsonFile extends Command
      *
      * @var string
      */
-    protected $signature = 'app:json-file';
+    protected $signature = 'old:json-file';
 
     /**
      * The console command description.
