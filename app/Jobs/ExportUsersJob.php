@@ -24,7 +24,7 @@ class ExportUsersJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $filePath = public_path('Docs/export.csv');
+        $filePath = public_path('Docs/utilisateurs.csv');
 
         if (file_exists($filePath)) {
             unlink($filePath);
@@ -32,17 +32,23 @@ class ExportUsersJob implements ShouldQueue
     
         $handle = fopen($filePath, 'w');
         fputcsv($handle, [
-            'Centre',
-            'Bureau',
-            'Identifiant',
-            'Mot de passe'
+            'COMMUNE',
+            'CANTON',
+            'CENTRE',
+            'BUREAU',
+            'IDENTIFIANT',
+            'MOT DE PASSE'
         ]);
     
-        User::with('center')->lazyById(100, 'id')
+        User::with('center.locality.department')->lazyById(100, 'id')
             ->each(function ($user) use ($handle) {
-                $label = is_null($user->center_id) ? "Aucun centre" : $user->center->label;
+                $commune = is_null($user->center_id) ? "Aucun centre" : $user->center->locality->department->label;
+                $canton = is_null($user->center_id) ? "Aucun canton" : $user->center->locality->label;
+                $centre = is_null($user->center_id) ? "Aucune commune" : $user->center->label;
                 fputcsv($handle, [
-                    $label,
+                    $commune,
+                    $canton,
+                    $centre,
                     $user->office,
                     $user->username,
                     $user->firstname
