@@ -29,3 +29,9 @@ Le repertoire ```database/seeders``` contient l'ensemble des données qui seront
 
 ## Exécuter le projet
     php artisan serve
+
+## Exécuter cette commande pour populer la base des données
+    php artisan app:start
+
+## Exécuter cette commande pour exporter les utilisateurs
+    php artisan app:export-users
