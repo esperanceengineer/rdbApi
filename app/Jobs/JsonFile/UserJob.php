@@ -33,7 +33,12 @@ class UserJob implements ShouldQueue
             $accronym = Tools::makeAcronym($this->center->label).''.$i;
             $office = str_replace("(","",$accronym);
             $userName = $this->center->code . '_' . $office . "_" . $number_format;
+            $newUserName = $this->center->code . '_' . $office . "_" . $number_format;
             $password = $userName . "@2025";
+
+            if (!is_null(User::where('username', $userName)->first()))
+                $newUserName = $this->center->code . '_' . $office . "_0" . $number_format;
+            $userName = $newUserName;
 
             $newUser = new User();
             $newUser->profile = Profile::REPRESENTANT;
