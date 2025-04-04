@@ -42,9 +42,9 @@ class ExportUsersJob implements ShouldQueue
     
         User::with('center.locality.department')->lazyById(100, 'id')
             ->each(function ($user) use ($handle) {
-                $commune = is_null($user->center_id) ? "Aucun centre" : $user->center->locality->department->label;
+                $commune = is_null($user->center_id) ? "Aucune commune" : $user->center->locality->department->label;
                 $canton = is_null($user->center_id) ? "Aucun canton" : $user->center->locality->label;
-                $centre = is_null($user->center_id) ? "Aucune commune" : $user->center->label;
+                $centre = is_null($user->center_id) ? "Aucun centre" : $user->center->label;
                 fputcsv($handle, [
                     $commune,
                     $canton,
