@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             'IsLocked' => $this->is_locked,
             'Office' => $this->office,
             'CenterId' => $this->center_id,
-            'CenterLabel' => $this->whenLoaded('center', fn () => $this->center->label),
+            'CenterLabel' => $this->whenLoaded('center', fn () => $this->center?->label),
             'HasPasswordTemp' => $this->has_password_temp,
             'CreatedAt' => $this->created_at,
             'UpdatedAt' => $this->updated_at,

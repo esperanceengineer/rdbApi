@@ -27,10 +27,10 @@ Route::middleware(['auth:sanctum', 'throttle:api', AlwaysAcceptsJson::class])->p
 
     Route::middleware('can:' . GLOBAL_ROLE::CONSULTANT->value)->prefix('consultant')->group(function () {
         Route::get('results', [StatisticController::class, 'getResults']);
-        Route::get('results/{user}', [StatisticController::class, 'getResult']);
     });
-
+    
     Route::middleware('can:' . GLOBAL_ROLE::REPRESENTANT->value)->prefix('representant')->group(function () {
+        Route::get('results/{user}', [StatisticController::class, 'getResult']);
         Route::post('results', [StatisticController::class, 'storeResult']);
     });
 });

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Data\Profile;
-use App\Models\Center;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,19 +27,17 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $centerCount = Center::count();
 
         return [
             'username' => fake()->randomNumber(5),
             'name' => fake()->name(),
             'firstname' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
-            'office' => "Bureau_".random_int(20, 50),
+            'office' => "Aucun Bureau",
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('123456789012'),
             'remember_token' => Str::random(10),
             'is_locked' => random_int(0, 1),
-            'center_id' => random_int(1, $centerCount),
             'profile' => fake()->randomElement(Profile::getCodes()),
         ];
     }
@@ -59,6 +56,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'username' => 'ADMIN',
+            'firstname' => 'ADMIN@2025',
             'password' => Hash::make('ADMIN@2025'),
             'is_locked' => 0,
             'profile' => Profile::ADMIN,
@@ -70,10 +68,9 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'username' => 'REPRESENTANT',
             'password' => Hash::make('REPRESENTANT@2025'),
+            'firstname' => 'REPRESENTANT@2025',
             'is_locked' => 0,
-            'profile' => Profile::REPRESENTANT,
-            'office' => "Bureau_".random_int(1, 20),
-            'center_id' => 1,
+            'profile' => Profile::REPRESENTANT
         ]);
     }
     public function representantExterne(): static
@@ -81,10 +78,9 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'username' => 'REPRESENTANT_01',
             'password' => Hash::make('REPRESENTANT_01@2025'),
+            'firstname' => 'REPRESENTANT_01@2025',
             'is_locked' => 0,
-            'profile' => Profile::REPRESENTANT,
-            'office' => "Bureau_".random_int(1, 20),
-            'center_id' => 6,
+            'profile' => Profile::REPRESENTANT
         ]);
     }
 
@@ -93,8 +89,9 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'username' => 'CONSULTANT',
             'password' => Hash::make('CONSULTANT@2025'),
+            'firstname' => 'CONSULTANT@2025',
             'is_locked' => 0,
-            'profile' => Profile::CONSULTANT,
+            'profile' => Profile::CONSULTANT
         ]);
     }
 
@@ -104,8 +101,9 @@ class UserFactory extends Factory
             'username' => 'PRESIDENT',
             'name' => 'Brice Clotaire OLIGUI NGUEMA',
             'password' => Hash::make('PRESIDENT@2025'),
+            'firstname' => 'PRESIDENT@2025',
             'is_locked' => 0,
-            'profile' => Profile::PRESIDENT,
+            'profile' => Profile::PRESIDENT
         ]);
     }
 }
